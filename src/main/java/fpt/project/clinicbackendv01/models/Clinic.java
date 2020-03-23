@@ -1,25 +1,24 @@
 package fpt.project.clinicbackendv01.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "patients")
+@Table(name = "clinics")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient {
+public class Clinic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Name is required")
     private String name;
+    @NotBlank(message = "Address is required")
+    private String address;
     private String email;
     @NotBlank(message = "Phone is required")
     private String phone;
@@ -27,16 +26,6 @@ public class Patient {
     @JoinColumn(unique = true)
     @JsonIgnore
     private User user;
-
-    @OneToMany(mappedBy = "patient")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    private List<Booking> bookings = new ArrayList<>();
-
-    public Patient(String name) {
-        this.name = name;
-    }
 
     public Long getId() {
         return id;
@@ -52,6 +41,14 @@ public class Patient {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {
@@ -76,17 +73,5 @@ public class Patient {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void addBookings(Booking booking) {
-        this.bookings.add(booking);
-    }
-
-    public void removeBooking(Booking booking) {
-        this.bookings.remove(booking);
     }
 }
