@@ -2,12 +2,15 @@ package fpt.project.clinicbackendv01.services;
 
 import fpt.project.clinicbackendv01.exception.PatientNotFoundException;
 import fpt.project.clinicbackendv01.exception.UserNotFoundException;
+import fpt.project.clinicbackendv01.models.Clinic;
 import fpt.project.clinicbackendv01.models.Patient;
 import fpt.project.clinicbackendv01.models.User;
 import fpt.project.clinicbackendv01.repositories.PatientRepository;
 import fpt.project.clinicbackendv01.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -25,11 +28,20 @@ public class PatientService {
         return patient;
     }
 
+    private Patient checkPatientExist(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        Optional<Patient> optional = patientRepository.findByUser(user);
+        Patient patient = null;
+        if(optional.isPresent()) patient = optional.get();
+        return patient;
+    }
+
     public Patient create(Patient newPatient, String username) {
         try {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UserNotFoundException("User not found with id: " + username));
-            if(one(user.getId()) != null)
+            if(checkPatientExist(user.getId()) != null)
                 throw new PatientNotFoundException("Profile already existed, please update instead");
             newPatient.setUser(user);
             Patient savedPatient = patientRepository.save(newPatient);

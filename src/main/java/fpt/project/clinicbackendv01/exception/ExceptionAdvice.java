@@ -25,4 +25,10 @@ public class ExceptionAdvice {
         CustomExceptionResponse response = new CustomExceptionResponse(ex.getMessage());
         return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ClinicException.class)
+    ResponseEntity<?> clinicException(ClinicException ex) {
+        CustomExceptionResponse response = new CustomExceptionResponse(ex.getMessage());
+        return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
+    }
 }
