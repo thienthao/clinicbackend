@@ -2,10 +2,14 @@ package fpt.project.clinicbackendv01.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "clinics")
@@ -26,6 +30,11 @@ public class Clinic {
     @JoinColumn(unique = true)
     @JsonIgnore
     private User user;
+    @OneToMany(mappedBy = "clinic")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    private List<ClinicService> services = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -73,5 +82,17 @@ public class Clinic {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<ClinicService> getServices() {
+        return services;
+    }
+
+    public void addServices(ClinicService service) {
+        this.services.add(service);
+    }
+
+    public void removeServices(ClinicService service) {
+        this.services.remove(service);
     }
 }
