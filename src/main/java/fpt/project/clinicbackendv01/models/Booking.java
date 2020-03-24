@@ -14,6 +14,7 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+//    @Column(unique = true, updatable = false)
     private String code;
     private String description;
     @Enumerated(EnumType.STRING)
@@ -28,4 +29,8 @@ public class Booking {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Patient patient;
+    @ManyToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private ClinicService service;
 }
