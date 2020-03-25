@@ -35,6 +35,8 @@ public class Clinic {
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     private List<ClinicService> services = new ArrayList<>();
+    private String longtitude;
+    private String latitude;
 
     public Long getId() {
         return id;
@@ -94,5 +96,21 @@ public class Clinic {
 
     public void removeServices(ClinicService service) {
         this.services.remove(service);
+    }
+
+    public String getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(String longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }

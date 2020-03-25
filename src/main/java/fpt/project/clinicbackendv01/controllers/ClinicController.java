@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/clinics")
-@PreAuthorize("hasRole('CLINIC')")
 public class ClinicController {
     @Autowired
     private ClinicService clinicService;
@@ -23,13 +23,21 @@ public class ClinicController {
     @Autowired
     private MapValidation mapValidation;
 
+    @GetMapping
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<List<Clinic>> all() {
+        return new ResponseEntity<List<Clinic>>(clinicService.all(), HttpStatus.OK);
+    }
+
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> one(@PathVariable long userId) {
         return ResponseEntity.ok()
                 .body(clinicService.one(userId));
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> create(@Valid @RequestBody Clinic clinic, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidation.map(result);
         if(errorMap != null) return errorMap;
@@ -37,6 +45,7 @@ public class ClinicController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> update(@Valid @RequestBody Clinic clinic, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidation.map(result);
         if(errorMap != null) return errorMap;

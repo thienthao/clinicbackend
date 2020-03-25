@@ -10,6 +10,7 @@ import fpt.project.clinicbackendv01.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,10 @@ public class ClinicService {
 
     @Autowired
     private UserRepository userRepository;
+
+    public List<Clinic> all() {
+        return clinicRepository.findAll();
+    }
 
     public Clinic one(long userId) {
         User user = userRepository.findById(userId)
@@ -62,4 +67,5 @@ public class ClinicService {
             throw new ClinicException("Cannot save clinic profile due to: " + e.getMessage());
         }
     }
+
 }
