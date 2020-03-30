@@ -16,8 +16,6 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clinicservices")
-@PreAuthorize("hasRole('CLINIC')")
 public class ClinicServiceController {
     @Autowired
     private ClinicServiceService clinicServices;
@@ -25,31 +23,48 @@ public class ClinicServiceController {
     @Autowired
     private MapValidation mapValidation;
 
-    @GetMapping
+    @GetMapping("/api/patient/clinicservices")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<?> allforPatient() {
+        return new ResponseEntity<List<ClinicService>>(clinicServices.allforPatient(), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/patient/clinics/{clinicId}/clinicservices")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<?> allByClinicId(@PathVariable long clinicId) {
+        return new ResponseEntity<List<ClinicService>>(clinicServices.allByClinicId(clinicId), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/clinicservices")
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> all(Principal principal) {
         return new ResponseEntity<List<ClinicService>>(clinicServices.all(principal.getName()), HttpStatus.OK);
     }
 
-    @GetMapping("/{serviceId}")
+    @GetMapping("/api/clinicservices/{serviceId}")
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> one(@PathVariable long serviceId, Principal principal) {
         return new ResponseEntity<ClinicService>(clinicServices.one(serviceId, principal.getName()), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/api/clinicservices")
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> create(@Valid @RequestBody ClinicService clinicService, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidation.map(result);
         if(errorMap != null) return errorMap;
         return new ResponseEntity<ClinicService>(clinicServices.create(clinicService, principal.getName()), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/api/clinicservices")
+    @PreAuthorize("hasRole('CLINIC')")
     public ResponseEntity<?> update(@Valid @RequestBody ClinicService clinicService, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = mapValidation.map(result);
         if(errorMap != null) return errorMap;
         return new ResponseEntity<ClinicService>(clinicServices.update(clinicService, principal.getName()), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/clinicservices/{id}")
+    @PreAuthorize("hasRole('CLINIC')")
     public void delete(@PathVariable long id, Principal principal) {
         clinicServices.delete(id, principal.getName());
     }

@@ -77,4 +77,14 @@ public class ClinicServiceService {
     public void delete(long id, String username) {
         clinicServiceRepository.delete(one(id, username));
     }
+
+    public List<ClinicService> allforPatient() {
+        return clinicServiceRepository.findAll();
+    }
+
+    public List<ClinicService> allByClinicId(long clinicId) {
+        Clinic clinic = clinicRepository.findById(clinicId)
+                .orElseThrow(() -> new ClinicException("Clinic not found"));
+        return clinicServiceRepository.findAllByClinic(clinic);
+    }
 }
